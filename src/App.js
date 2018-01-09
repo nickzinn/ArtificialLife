@@ -5,7 +5,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <ArtificialLifeComponent height={660} width={500}/>
+        <ArtificialLifeComponent />
       </div>
     );
   }

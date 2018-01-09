@@ -1,9 +1,17 @@
 import React from 'react';
 class CanvasComponent extends React.Component {
+  componentWillMount(){
+    var forceEven = (x) => ( x % 2 == 1 ? x-1 :x);
+    this.width  = forceEven(Math.min(window.innerWidth - 10, 500));
+    this.height = forceEven(Math.min(window.innerHeight-90, 660));
+    console.log("w: " + this.width);
+  }
+
     componentDidMount() {
       const simulation = this.props.simulation;
       const world = simulation.world;
       const canvas = this.refs.canvas;
+
       this.drawing = false;
       this.mousePoint = null;
 
@@ -56,7 +64,7 @@ class CanvasComponent extends React.Component {
     }
     render() {
          return (
-           <canvas ref="canvas" className="world-canvas" height={this.props.height} width={this.props.width}></canvas>
+           <canvas ref="canvas" height={this.height} width={this.width} className="world-canvas"></canvas>
          );
     }
 }

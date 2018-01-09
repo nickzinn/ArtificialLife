@@ -73,10 +73,11 @@ class BugSummaryTable extends React.Component {
 class ArtificialLifeComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.simulation = new Simulation(this.props.width, this.props.height);
+    this.simulation = new Simulation();
   }
 
   componentDidMount() {
+    this.simulation.setCanvasSize(this.canvasComponent.width, this.canvasComponent.height);
     this.simulation.canvasComponent = this.canvasComponent;
     this.simulation.summaryTable = this.summaryTable;
     this.simulation.restart();
@@ -129,11 +130,11 @@ class ArtificialLifeComponent extends React.Component {
       <div id="wrap-container">
         <div className='item-container'>
          <CanvasComponent ref={(ip) => this.canvasComponent = ip} className="world-canvas"
-           height={this.props.height} width={this.props.width} simulation={this.simulation}>
+            simulation={this.simulation}>
          </CanvasComponent>
         </div>
         <div className='item-container'>
-         <div id="populationChart" style={{width:"492px",  height:"300px"}}></div>
+         <div id="populationChart" style={{  height:"300px"}}></div>
          <Message>
          <FormComponent simulation={this.simulation} onUpdate={this.restart} />
          </Message>

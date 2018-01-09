@@ -2,12 +2,15 @@ import {World} from './artificialLife.js'
 var Highcharts = require('highcharts');
 
 class Simulation{
-  constructor(canvasWidth, canvasHeight){
+  constructor(){
     this.requestID =0;
     this.world = new World();
     this.generations =0;
-    this.canvasHeight = canvasHeight;
-    this.canvasWidth = canvasWidth;
+  }
+  setCanvasSize(width, height){
+    this.canvasHeight = height;
+    this.canvasWidth = width;
+    document.getElementById('populationChart').width = width-10;
   }
 
   restart(){
