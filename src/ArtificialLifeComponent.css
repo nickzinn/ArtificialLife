@@ -1,0 +1,16 @@
+.world-canvas { border: 1px solid black; }
+
+th, td {
+    padding: 5px;
+}
+
+#wrap-container {
+  margin-left: 5px;
+  margin-right: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+}
+.item-container {
+    margin: 5px;
+}
