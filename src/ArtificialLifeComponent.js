@@ -88,7 +88,7 @@ class ArtificialLifeComponent extends React.Component {
       <div>
 
       <Menu size={'large'} stackable borderless>
-        <Menu.Item header><Icon size={"large"} name='bug'/>Artifical Life Simulation</Menu.Item>
+        <Menu.Item header><Icon size={"large"} name='bug'/>Artificial Life Simulation</Menu.Item>
         <Menu.Menu position='right'>
         <Menu.Item>
         <Button color={'teal'} icon labelPosition='left' onClick={this.restart}>
@@ -101,7 +101,7 @@ class ArtificialLifeComponent extends React.Component {
         </Menu.Menu>
       </Menu>
 
-      <Container id="wrap-container">
+      <div id="wrap-container">
         <div className='item-container'>
          <CanvasComponent ref={(ip) => this.canvasComponent = ip} className="world-canvas"
            height={this.props.height} width={this.props.width} simulation={this.simulation}>
@@ -118,7 +118,7 @@ class ArtificialLifeComponent extends React.Component {
           <h5 id="performance" ></h5>
           <BugSummaryTable ref={(ip) => this.summaryTable = ip} />
         </div>
-      </Container>
+      </div>
 
       </div>
     );
