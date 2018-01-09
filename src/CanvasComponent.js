@@ -3,7 +3,7 @@ class CanvasComponent extends React.Component {
   componentWillMount(){
     var forceEven = (x) => ( x % 2 == 1 ? x-1 :x);
     this.width  = forceEven(Math.min(window.innerWidth - 10, 500));
-    this.height = forceEven(Math.min(window.innerHeight-90, 660));
+    this.height = forceEven(Math.min(window.innerHeight-90, 800));
     console.log("w: " + this.width);
   }
 

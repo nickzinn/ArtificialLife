@@ -37,7 +37,6 @@ class PauseButton extends React.Component {
 
 //<BugSummaryTable ref={(ip) => this.summaryTable = ip} />
 class BugSummaryTable extends React.Component {
-
   state = {stats:[]};
   update = (data) => this.setState({stats:data});
 
