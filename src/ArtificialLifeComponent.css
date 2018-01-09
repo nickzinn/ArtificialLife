@@ -9,7 +9,7 @@ th, td {
   margin-right: 5px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: left;
+  justify-content: center;
 }
 .item-container {
     margin: 5px;
