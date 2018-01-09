@@ -4,7 +4,7 @@ import {Simulation} from './simulation.js';
 import CanvasComponent from './CanvasComponent.js';
 import FormComponent from './FormComponent.js';
 import InfoModal from './InfoModal.js'
-import { Menu, Button, Icon, Table, Container, Message } from 'semantic-ui-react';
+import { Menu, Button, Icon, Table, Container, Message, Responsive } from 'semantic-ui-react';
 
 
 //# <PauseButton onPause={this.pause} onResume={this.resume} />
@@ -19,12 +19,19 @@ class PauseButton extends React.Component {
       this.setState({pause: !this.state.pause});
   }
   render() {
+    if(this.props.small){
+    return (
+      <Button color={'teal'} icon onClick={this.handleClick}>
+      <Icon name={this.state.pause ? 'play' : 'pause'} /></Button>
+    );
+  }else{
     return (
       <Button color={'teal'}  style={{width:"153px"}} icon labelPosition='left' onClick={this.handleClick}>
       <Icon name={this.state.pause ? 'play' : 'pause'} />
       {this.state.pause ? 'RESUME' : 'PAUSE'}
     </Button>
     );
+  }
   }
 }
 
@@ -47,7 +54,7 @@ class BugSummaryTable extends React.Component {
       );
     }.bind(this));
     return (
-    <Table compact collapsing striped >
+    <Table compact unstackable striped >
        <Table.Header>
          <Table.Row>
            <Table.HeaderCell>ID</Table.HeaderCell>
@@ -87,6 +94,23 @@ class ArtificialLifeComponent extends React.Component {
     return (
       <div>
 
+<Responsive {...Responsive.onlyMobile}>
+  <Menu size={'small'} borderless>
+    <Menu.Item header><Icon  name='bug'/>Artificial Life Simulation</Menu.Item>
+    <Menu.Menu position='right'>
+    <Menu.Item>
+    <Button color={'teal'} icon onClick={this.restart}>
+    <Icon name='refresh'/></Button>
+    </Menu.Item>
+    <Menu.Item>
+    <PauseButton small onPause={this.pause} onResume={this.resume} />
+    </Menu.Item>
+    <Menu.Item> <InfoModal small/> </Menu.Item>
+  </Menu.Menu>
+  </Menu>
+</Responsive>
+
+<Responsive minWidth={Responsive.onlyTablet.minWidth}>
       <Menu size={'large'} stackable borderless>
         <Menu.Item header><Icon size={"large"} name='bug'/>Artificial Life Simulation</Menu.Item>
         <Menu.Menu position='right'>
@@ -98,8 +122,9 @@ class ArtificialLifeComponent extends React.Component {
         <PauseButton onPause={this.pause} onResume={this.resume} />
         </Menu.Item>
         <Menu.Item> <InfoModal /> </Menu.Item>
-        </Menu.Menu>
+      </Menu.Menu>
       </Menu>
+</Responsive>
 
       <div id="wrap-container">
         <div className='item-container'>

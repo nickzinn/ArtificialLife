@@ -59,7 +59,7 @@ class FormComponent extends React.Component {
 
   render() {
        return (
-         <Form size='small'>
+         <Form unstackable size='small'>
          <Form.Group widths='equal'>
            <Slider label='Mutation Probability' value={this.state.mutateProbability} name='mutateProbability'
              constraint={[.01,.5,.01]} onChange={this.handleChange} />

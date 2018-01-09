@@ -10,11 +10,17 @@ class InfoModal extends React.Component {
 
   render() {
     const { open } = this.state
-
+    var button;
+    if(this.props.small){
+      button = (<Button color={'teal'} icon onClick={this.show}>
+      <Icon name='info circle'/></Button>);
+    }else{
+      button = (<Button color={'teal'} icon labelPosition='left' onClick={this.show}>
+      <Icon name='info circle'/>ABOUT</Button>);
+    }
     return (
       <div>
-      <Button color={'teal'} icon labelPosition='left' onClick={this.show}>
-      <Icon name='info circle'/>ABOUT</Button>
+      {button}
         <Modal dimmer='blurring'  size='small' open={open} onClose={this.close}>
           <Modal.Header>
             <Icon size={"large"} name='bug'/>
@@ -50,6 +56,7 @@ class InfoModal extends React.Component {
             year old, self-taught self couldn't find, and it only took me
             a weekend to write (not the 1 year of the original)!
             </p>
+            <p><a href="https://github.com/nickzinn/ArtificialLife">Source code is here.</a></p>
             <em>Nicholas Zinn (nickzinn@gmail.com), 2017.</em>
             </Modal.Description>
           </Modal.Content>
