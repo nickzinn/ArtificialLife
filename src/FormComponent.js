@@ -86,7 +86,7 @@ class FormComponent extends React.Component {
           </Form.Group>
           <Form.Group widths='equal'>
             <Slider label='New Bug Energy' value={this.state.bugEnergyValue} name='bugEnergyValue'
-              constraint={[100, 600, 10]} onChange={this.handleChange} />
+              constraint={[100, 300, 10]} onChange={this.handleChange} />
             <Slider label='Display Factor' value={this.state.displayFactor} name='displayFactor'
               constraint={[1, 2, 1]} onChange={this.handleChangeRestart} />
           </Form.Group>
