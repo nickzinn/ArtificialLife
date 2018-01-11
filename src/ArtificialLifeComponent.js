@@ -85,7 +85,12 @@ class ArtificialLifeComponent extends React.Component {
     this.simulation.stop();
   }
 
-  restart = () =>  this.simulation.restart();
+  restart = () =>  {
+    var setPause = (x) => {if(x) x.setState({pause: false});};
+    setPause(this.pauseButton1);
+    setPause(this.pauseButton2);
+    this.simulation.restart();
+  }
   pause = () =>  this.simulation.pause();
   resume = () =>  this.simulation.resume();
 
@@ -102,7 +107,8 @@ class ArtificialLifeComponent extends React.Component {
     <Icon name='refresh'/></Button>
     </Menu.Item>
     <Menu.Item>
-    <PauseButton small onPause={this.pause} onResume={this.resume} />
+    <PauseButton small onPause={this.pause} onResume={this.resume}
+      ref={(ip) => this.pauseButton1 = ip} />
     </Menu.Item>
     <Menu.Item> <InfoModal small/> </Menu.Item>
   </Menu.Menu>
@@ -118,7 +124,8 @@ class ArtificialLifeComponent extends React.Component {
         <Icon name='refresh'/>RESTART </Button>
         </Menu.Item>
         <Menu.Item>
-        <PauseButton onPause={this.pause} onResume={this.resume} />
+        <PauseButton onPause={this.pause} onResume={this.resume}
+          ref={(ip) => this.pauseButton2 = ip}/>
         </Menu.Item>
         <Menu.Item> <InfoModal /> </Menu.Item>
       </Menu.Menu>

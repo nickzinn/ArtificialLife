@@ -32,10 +32,10 @@ class Bug{
   mutate(){
     var pos = Math.floor(Math.random() * this.genome.length);
     this.genome[pos] = Math.max(0, this.genome[pos] + Math.random()*2 - 1);
-    this.id = ++Bug.prototype.bugIDCount;
+    this.id = ++bugIDCount;
   }
 }
-Bug.prototype.bugIDCount =1;
+var bugIDCount =1;
 
 
 
@@ -60,7 +60,7 @@ class World{
       this.food[i].fill(0);
     }
     this.generateFood(this.initialFood);
-
+    bugIDCount =1;
     this.bugs = [];
     this.bugs.push(new Bug(100,100,800, 1, [1,1,1,1,1,1,1,1]));
   }

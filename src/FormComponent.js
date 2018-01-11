@@ -50,7 +50,7 @@ class FormComponent extends React.Component {
 
   handleChange(e, { name, value }){
     this.setState({ [name]: value });
-    this.props.simulation.world[name] = Number.parseInt(value,10);
+    this.props.simulation.world[name] = Number.parseFloat(value,10);
   }
   handleChangeRestart(e, { name, value }){
     this.handleChange(e, {'name': name, 'value': value});
@@ -62,7 +62,7 @@ class FormComponent extends React.Component {
          <Form unstackable size='small'>
          <Form.Group widths='equal'>
            <Slider label='Mutation Probability' value={this.state.mutateProbability} name='mutateProbability'
-             constraint={[.01,.5,.01]} onChange={this.handleChange} />
+             constraint={[0.0,.5,.01]} onChange={this.handleChange} />
            <Slider label='Speed' value={this.state.stepsPerAnimation} name='stepsPerAnimation'
              constraint={[1, 30, 1]} onChange={this.handleChange} />
          </Form.Group>
