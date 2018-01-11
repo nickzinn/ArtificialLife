@@ -53,7 +53,7 @@ class BugSummaryTable extends React.Component {
       );
     }.bind(this));
     return (
-    <Table compact unstackable striped >
+    <Table style={{  width:"350px"}} compact unstackable striped >
        <Table.Header>
          <Table.Row>
            <Table.HeaderCell>ID</Table.HeaderCell>
@@ -79,7 +79,6 @@ class ArtificialLifeComponent extends React.Component {
     this.simulation.setCanvasSize(this.canvasComponent.width, this.canvasComponent.height);
     this.simulation.canvasComponent = this.canvasComponent;
     this.simulation.summaryTable = this.summaryTable;
-    this.simulation.restart();
   }
 
   componentWillUnmount() {
@@ -129,7 +128,7 @@ class ArtificialLifeComponent extends React.Component {
       <div id="wrap-container">
         <div className='item-container'>
          <CanvasComponent ref={(ip) => this.canvasComponent = ip} className="world-canvas"
-            simulation={this.simulation}>
+            simulation={this.simulation} start={this.restart}>
          </CanvasComponent>
         </div>
         <div className='item-container'>

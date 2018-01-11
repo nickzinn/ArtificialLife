@@ -5,12 +5,13 @@ class Simulation{
   constructor(){
     this.requestID =0;
     this.world = new World();
-    this.generations =0;
+    this.generations =0;    
   }
   setCanvasSize(width, height){
     this.canvasHeight = height;
     this.canvasWidth = width;
     document.getElementById('populationChart').width = width-10;
+    this.chart = new Chart([0,0], [0, this.world.initialFood]);
   }
 
   restart(){
@@ -24,9 +25,10 @@ class Simulation{
     this.frames =0;
     this.lastGeneration=0;
     this.resume();
-    if(this.chart)
+    if(this.chart){
       this.chart.destroy();
-    this.chart = new Chart([0,0], [0, this.world.initialFood]);
+      this.chart = new Chart([0,0], [0, this.world.initialFood]);
+    }
   }
   step(timestamp) {
     if(this.drawing){

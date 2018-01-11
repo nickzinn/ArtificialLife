@@ -1,4 +1,18 @@
-.world-canvas { border: 1px solid black; }
+.world-canvas {
+  border: 1px solid black;
+
+}
+
+.canvas-container{
+  position: relative;
+}
+
+.start-button {
+  position:absolute;
+  left:24%;
+  top:40%
+}
+
 
 th, td {
     padding: 5px;

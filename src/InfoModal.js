@@ -9,7 +9,7 @@ class InfoModal extends React.Component {
   close = () => this.setState({ open: false });
 
   render() {
-    const { open } = this.state
+    const { open } = this.state;
     var button;
     if(this.props.small){
       button = (<Button color={'teal'} icon onClick={this.show}>

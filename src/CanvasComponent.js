@@ -1,5 +1,8 @@
 import React from 'react';
+
+import { Button  } from 'semantic-ui-react';
 class CanvasComponent extends React.Component {
+  first = true;
   componentWillMount(){
     var forceEven = (x) => ( x % 2 == 1 ? x-1 :x);
     this.width  = forceEven(Math.min(window.innerWidth - 10, 500));
@@ -32,7 +35,14 @@ class CanvasComponent extends React.Component {
         this.mousePoint = calcPoint(e);
       }, false);
     }
+
+
+
     updateCanvas() {
+      if(this.first){
+        this.refs.startButton.style.visibility="hidden";
+        this.first = false;
+      }
       const simulation = this.props.simulation;
       const world = simulation.world;
       const canvas = this.refs.canvas;
@@ -62,9 +72,15 @@ class CanvasComponent extends React.Component {
         ctx.fillRect(bug.x*df, bug.y*df, df, df);
       }
     }
+    start = () => {
+        this.props.start();
+    };
     render() {
          return (
+           <div height={this.height} width={this.width} className="canvas-container">
            <canvas ref="canvas" height={this.height} width={this.width} className="world-canvas"></canvas>
+           <button id='start-button' className='start-button ui teal button massive' onClick={this.start} ref="startButton">Start Simulation</button>
+           </div>
          );
     }
 }
