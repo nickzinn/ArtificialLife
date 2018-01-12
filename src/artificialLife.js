@@ -41,14 +41,14 @@ var bugIDCount =1;
 
 class World{
   constructor(){
-    this.initialFood = 80000;
+    this.initialFood = 1000;
     this.foodGrowth = 20;
     this.energyConsumption = 1.0;
     this.foodValue = 10;
     this.maxFood = 300;
     this.reproductionEnergy =600;
-    this.bugEnergyValue = 200;
-    this.displayFactor = 2;
+    this.bugEnergyValue = 1.0;
+    this.displayFactor = 4;
     this.stepsPerAnimation = 1;
     this.mutateProbability = .1;
     this.seed = 0;
@@ -62,7 +62,7 @@ class World{
     this.generateFood(this.initialFood);
     bugIDCount =1;
     this.bugs = [];
-    this.bugs.push(new Bug(100,100,800, 1, [1,1,1,1,1,1,1,1]));
+    this.bugs.push(new Bug(Math.floor(this.width/2), Math.floor(this.height/2),800, 1, [1,1,1,1,1,1,1,1]));
   }
 
   getFoodAt(x,y){
@@ -116,8 +116,8 @@ class World{
       bug.energy += this.eatFoodAt(bug.x, bug.y);
 
       if(bug.energy> this.reproductionEnergy){
-        bug.energy = this.bugEnergyValue;
-        var newBug = new Bug(bug.x, bug.y, this.bugEnergyValue, bug.id, bug.genome);
+        bug.energy = (this.reproductionEnergy/2.0)  * this.bugEnergyValue;
+        var newBug = new Bug(bug.x, bug.y, bug.energy , bug.id, bug.genome);
         if(Math.random() < this.mutateProbability){
           newBug.mutate();
         }

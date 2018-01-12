@@ -68,12 +68,12 @@ class FormComponent extends React.Component {
          </Form.Group>
           <Form.Group widths='equal'>
             <Slider label='InitialFood' value={this.state.initialFood} name='initialFood'
-              constraint={[20000, 200000, 100]} onChange={this.handleChangeRestart} />
+              constraint={[2000, 200000, 100]} onChange={this.handleChangeRestart} />
             <Slider label='Food Growth per Generation' value={this.state.foodGrowth} name='foodGrowth'
               constraint={[5, 100, 1]} onChange={this.handleChange} />
           </Form.Group>
           <Form.Group widths='equal'>
-            <Slider label='Energy Consumption per Generation' value={this.state.energyConsumption} name='energyConsumption'
+            <Slider label='Energy Consumption' value={this.state.energyConsumption} name='energyConsumption'
               constraint={[.1,2,.1]} onChange={this.handleChange} />
             <Slider label='Food Value (energy)' value={this.state.foodValue} name='foodValue'
               constraint={[5, 100, 1]} onChange={this.handleChange} />
@@ -86,9 +86,9 @@ class FormComponent extends React.Component {
           </Form.Group>
           <Form.Group widths='equal'>
             <Slider label='New Bug Energy' value={this.state.bugEnergyValue} name='bugEnergyValue'
-              constraint={[100, 300, 10]} onChange={this.handleChange} />
+              constraint={[.1, 1.0, .1]} onChange={this.handleChange} />
             <Slider label='Display Factor' value={this.state.displayFactor} name='displayFactor'
-              constraint={[1, 2, 1]} onChange={this.handleChangeRestart} />
+              constraint={[1, 6, 1]} onChange={this.handleChangeRestart} />
           </Form.Group>
           </Form>
 

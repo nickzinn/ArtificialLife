@@ -45,7 +45,7 @@ class BugSummaryTable extends React.Component {
     var rows = [];
     stats.slice(0,10).forEach(function(stat, index) {
         rows.push(
-          <Table.Row key={index}>
+          <Table.Row key={index} style={{color: stat[3]}}>
             <Table.Cell>{stat[0]}</Table.Cell>
             <Table.Cell>{stat[1]}</Table.Cell>
             <Table.Cell>[{stat[2].map( (x)=> x.toFixed(2) ).join(' ')}]</Table.Cell>
@@ -53,7 +53,7 @@ class BugSummaryTable extends React.Component {
       );
     }.bind(this));
     return (
-    <Table style={{  width:"350px"}} compact unstackable striped >
+    <Table style={{  width:"324px"}} size='small' compact unstackable striped >
        <Table.Header>
          <Table.Row>
            <Table.HeaderCell>ID</Table.HeaderCell>
@@ -89,6 +89,8 @@ class ArtificialLifeComponent extends React.Component {
     var setPause = (x) => {if(x) x.setState({pause: false});};
     setPause(this.pauseButton1);
     setPause(this.pauseButton2);
+    this.canvasComponent.restart();
+    this.simulation.setCanvasSize(this.canvasComponent.width, this.canvasComponent.height);
     this.simulation.restart();
   }
   pause = () =>  this.simulation.pause();

@@ -3,13 +3,19 @@ import React from 'react';
 import { Button  } from 'semantic-ui-react';
 class CanvasComponent extends React.Component {
   first = true;
+  idToColorMap = new Map();
+
+
   componentWillMount(){
-    var forceEven = (x) => ( x % 2 == 1 ? x-1 :x);
-    this.width  = forceEven(Math.min(window.innerWidth - 10, 500));
-    this.height = forceEven(Math.min(window.innerHeight-90, 800));
-    console.log("w: " + this.width);
+    this.restart();
   }
 
+  restart(){
+    this.idToColorMap.set(1,'rgb(200,0,0)');
+    var forceEven = (x) => ( x - (x % this.props.simulation.world.displayFactor));
+    this.width  = forceEven(Math.min(window.innerWidth - 10, 500));
+    this.height = forceEven(Math.min(window.innerHeight-90, 800));
+  }
     componentDidMount() {
       const simulation = this.props.simulation;
       const world = simulation.world;
@@ -45,11 +51,11 @@ class CanvasComponent extends React.Component {
       }
       const simulation = this.props.simulation;
       const world = simulation.world;
-      const canvas = this.refs.canvas;
-      const ctx = canvas.getContext('2d');
       if(this.drawing){
         world.paintFood(this.mousePoint.x, this.mousePoint.y);
       }
+      const canvas = this.refs.canvas;
+      const ctx = canvas.getContext('2d');
       simulation.foodCount =0;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = 'rgb(0,200,0)';
@@ -66,10 +72,17 @@ class CanvasComponent extends React.Component {
           }
         }
       }
-      ctx.fillStyle = 'rgb(200,0,0)';
+
       for(var i =0; i< world.bugs.length;i++){
         var bug = world.bugs[i];
-        ctx.fillRect(bug.x*df, bug.y*df, df, df);
+        if(!bug.color){
+          var color = this.idToColorMap.get(bug.id);
+          if(!color)
+            this.idToColorMap.set(bug.id, color= bugColors[bug.id % bugColors.length] );
+          bug.color = color;
+        }
+        ctx.fillStyle = bug.color;
+        ctx.fillRect(bug.x*df-1, bug.y*df-1, df+1, df+1);
       }
     }
     start = () => {
@@ -84,5 +97,9 @@ class CanvasComponent extends React.Component {
          );
     }
 }
+
+var bugColors = ['#F44336','#9C27B0','#3F51B5','#FFEB3B','#EF5350','#9C27B0','#2196F3','#FFC107','#FF1744',
+  '#AA00FF','#00BCD4','#FF9800','#D50000','#6200EA','#304FFE','#FF5722','#F44336','#6200EA','#304FFE','#FF5722',
+  '#E91E63','#673AB7','#0091EA','#FFAB00','#C51162','#00B8D4','#FF6D00','#F50057','#FF3D00'];
 
 export default CanvasComponent;

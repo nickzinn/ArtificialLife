@@ -5,12 +5,15 @@ class Simulation{
   constructor(){
     this.requestID =0;
     this.world = new World();
-    this.generations =0;    
+    this.generations =0;
   }
   setCanvasSize(width, height){
     this.canvasHeight = height;
     this.canvasWidth = width;
-    document.getElementById('populationChart').width = width-10;
+    if(this.chart){
+      this.chart.destroy();
+    }
+    document.getElementById('populationChart').style.width = width-10;
     this.chart = new Chart([0,0], [0, this.world.initialFood]);
   }
 
@@ -129,7 +132,7 @@ function createStats(bugs){
   var results = [];
   for(var i=0; i< sortedBugGroups.length; i++){
     var bug = sortedBugGroups[i][0];
-    var row = [bug.id, sortedBugGroups[i].length, bug.genome];
+    var row = [bug.id, sortedBugGroups[i].length, bug.genome, bug.color];
     results.push(row);
   }
   return results;
