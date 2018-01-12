@@ -41,7 +41,7 @@ var bugIDCount =1;
 
 class World{
   constructor(){
-    this.initialFood = 1000;
+    this.initialFood = 2000;
     this.foodGrowth = 20;
     this.energyConsumption = 1.0;
     this.foodValue = 10;
