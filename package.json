@@ -1,6 +1,5 @@
 {
   "name": "al",
-  "homepage": "https://nzinn.github.io/ArtificialLife",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
