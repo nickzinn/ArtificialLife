@@ -14,7 +14,7 @@ class CanvasComponent extends React.Component {
     this.idToColorMap.set(1,'rgb(200,0,0)');
     var forceEven = (x) => ( x - (x % this.props.simulation.world.displayFactor));
     this.width  = forceEven(Math.max(Math.min(window.innerWidth - 10, 500), 300));
-    this.height = forceEven(Math.max(Math.min(window.innerHeight-90, 800),400));
+    this.height = forceEven(Math.max(Math.min(window.innerHeight- 68, 800),400));
     if(this.refs.canvas){
       this.refs.canvas.height = this.height;
       this.refs.canvas.width = this.width;
