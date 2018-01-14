@@ -29,8 +29,4 @@ year old, self-taught self, couldn't debug!
 <p><a href="https://github.com/nickzinn/ArtificialLife" target="_blank">Source code is here.</a></p>
 <em>Nicholas Zinn (nickzinn@gmail.com), 2018.</em>
 
-<em>Nicholas Zinn (nickzinn@gmail.com), 2017.</em>
-
-
-
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
