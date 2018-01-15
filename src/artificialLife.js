@@ -24,7 +24,9 @@ class Bug{
     }
     var xMoves = [0,1,1,1,0,-1,-1,-1];
     var yMoves = [1,1,0,-1,-1,-1,0,1];
-    var bounds = (c, size) => ( c<0 ? size -1 : (c>=size ? 0: c) );
+    var wrapAround = (c, size) => ( c<0 ? size -1 : (c>=size ? 0: c) );
+    var noWrap = (c,size) => ( c<0 ? 0 : (c>=size ? size-1: c) );
+    var bounds = (world.wrapAround) ? wrapAround : noWrap;
     this.x = bounds(this.x+ xMoves[pos], world.width);
     this.y = bounds(this.y+ yMoves[pos], world.height);
   }
@@ -52,6 +54,7 @@ class World{
     this.stepsPerAnimation = 1;
     this.mutateProbability = .1;
     this.seed = 0;
+    this.wrapAround = true;
   }
   init(){
     this.food = new Array(this.width);

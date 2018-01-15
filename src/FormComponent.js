@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form } from 'semantic-ui-react';
+import { Form, Checkbox } from 'semantic-ui-react';
 
 // <Slider label='InitialFood' value={this.state.initialFood} name={'initialFood'}
 //    constraint={[20000, 200000, 100]} onChange={this.handleChange} />
@@ -20,6 +20,29 @@ class Slider extends React.Component {
        min={min} max={max} step={step} name={this.props.name}
        onChange={this.handleChange}  type='range'
        value={this.state.value} />
+     );
+   }
+}
+
+class CheckboxComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {'value': props.value};
+    this.handleChange = this.handleChange.bind(this);
+  }
+  handleChange(e, { name, checked }){
+    this.setState({ 'value': checked });
+    this.props.onChange(e,{'name': name, 'value': checked});
+  }
+  render() {
+     return (
+       <Form.Field inline>
+
+        <Checkbox style={{'vertical-align': 'text-bottom'}} name={this.props.name}
+        onChange={this.handleChange}
+        checked={this.state.value} />
+      <label style={{'vertical-align': 'text-top'}}>{this.props.label}</label>
+    </Form.Field>
      );
    }
 }
@@ -50,7 +73,11 @@ class FormComponent extends React.Component {
 
   handleChange(e, { name, value }){
     this.setState({ [name]: value });
-    this.props.simulation.world[name] = Number.parseFloat(value,10);
+    if(Number.isFinite(this.props.simulation.world[name])){
+      this.props.simulation.world[name] = Number.parseFloat(value,10);
+    }else{
+      this.props.simulation.world[name] = value;
+    }
   }
   handleChangeRestart(e, { name, value }){
     this.handleChange(e, {'name': name, 'value': value});
@@ -69,7 +96,7 @@ class FormComponent extends React.Component {
           <Form.Group widths='equal'>
             <Slider label='InitialFood' value={this.state.initialFood} name='initialFood'
               constraint={[2000, 200000, 100]} onChange={this.handleChangeRestart} />
-            <Slider label='Food Growth per Generation' value={this.state.foodGrowth} name='foodGrowth'
+            <Slider label='Food Growth' value={this.state.foodGrowth} name='foodGrowth'
               constraint={[5, 100, 1]} onChange={this.handleChange} />
           </Form.Group>
           <Form.Group widths='equal'>
@@ -81,7 +108,7 @@ class FormComponent extends React.Component {
           <Form.Group widths='equal'>
             <Slider label='Max Food in Square' value={this.state.maxFood} name='maxFood'
               constraint={[100, 400, 10]} onChange={this.handleChange} />
-            <Slider label='Reproduction Energy Level' value={this.state.reproductionEnergy} name='reproductionEnergy'
+            <Slider label='Reproduction Energy' value={this.state.reproductionEnergy} name='reproductionEnergy'
               constraint={[400, 1500, 10]} onChange={this.handleChange} />
           </Form.Group>
           <Form.Group widths='equal'>
@@ -89,6 +116,10 @@ class FormComponent extends React.Component {
               constraint={[.1, 1.0, .1]} onChange={this.handleChange} />
             <Slider label='Display Factor' value={this.state.displayFactor} name='displayFactor'
               constraint={[1, 6, 1]} onChange={this.handleChangeRestart} />
+          </Form.Group>
+          <Form.Group widths='equal'>
+            <CheckboxComponent label='Enable Wrap Around' value={this.state.wrapAround} name='wrapAround'
+               onChange={this.handleChange} />
           </Form.Group>
           </Form>
 
