@@ -38,10 +38,9 @@ class CheckboxComponent extends React.Component {
      return (
        <Form.Field inline>
 
-        <Checkbox style={{'vertical-align': 'text-bottom'}} name={this.props.name}
-        onChange={this.handleChange}
-        checked={this.state.value} />
-      <label style={{'vertical-align': 'text-top'}}>{this.props.label}</label>
+
+      <Checkbox  fitted name={this.props.name} onChange={this.handleChange}
+      checked={this.state.value} label={{ children: this.props.label}}/>
     </Form.Field>
      );
    }

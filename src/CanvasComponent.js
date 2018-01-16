@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Button  } from 'semantic-ui-react';
 class CanvasComponent extends React.Component {
   first = true;
   idToColorMap = new Map();
@@ -63,12 +62,12 @@ class CanvasComponent extends React.Component {
       simulation.foodCount =0;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = 'rgb(0,200,0)';
-      var df = world.displayFactor;
+      var df = world.displayFactor, color;
       for(var x =0; x < world.width; x++){
         for(var y=0; y < world.height; y++){
           var food = world.getFoodAt(x,y);
           if( food > 0){
-            var color = Math.floor((100 - (food/world.maxFood) * 100) + 155);
+            color = Math.floor((100 - (food/world.maxFood) * 100) + 155);
             color = Math.min(color, 255);
             ctx.fillStyle = 'rgb(0,'+ color + ',0)';
             ctx.fillRect(x*df, y*df, df, df);
@@ -80,7 +79,7 @@ class CanvasComponent extends React.Component {
       for(var i =0; i< world.bugs.length;i++){
         var bug = world.bugs[i];
         if(!bug.color){
-          var color = this.idToColorMap.get(bug.id);
+          color = this.idToColorMap.get(bug.id);
           if(!color)
             this.idToColorMap.set(bug.id, color= bugColors[bug.id % bugColors.length] );
           bug.color = color;

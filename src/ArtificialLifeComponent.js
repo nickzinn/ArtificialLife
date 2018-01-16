@@ -4,7 +4,7 @@ import {Simulation} from './simulation.js';
 import CanvasComponent from './CanvasComponent.js';
 import FormComponent from './FormComponent.js';
 import InfoModal from './InfoModal.js'
-import { Menu, Button, Icon, Table, Container, Message, Responsive } from 'semantic-ui-react';
+import { Menu, Button, Icon, Table, Message, Responsive } from 'semantic-ui-react';
 
 
 //# <PauseButton onPause={this.pause} onResume={this.resume} />
@@ -51,7 +51,7 @@ class BugSummaryTable extends React.Component {
             <Table.Cell>[{stat[2].map( (x)=> x.toFixed(2) ).join(' ')}]</Table.Cell>
           </Table.Row>
       );
-    }.bind(this));
+    });
     return (
     <Table style={{  width:"324px"}} size='small' compact unstackable striped >
        <Table.Header>
@@ -148,7 +148,7 @@ class ArtificialLifeComponent extends React.Component {
 
         </div>
         <div className='item-container'>
-          <h5 id="performance" ></h5>
+          <h5 id="performance" >GPS: 0 FPS: 0 Bugs: 0 Food: 0</h5>
           <BugSummaryTable ref={(ip) => this.summaryTable = ip} />
         </div>
       </div>

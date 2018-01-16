@@ -116,9 +116,9 @@ class Chart{
 }
 
 function createStats(bugs){
-  var groupedBugsMap = new Map();
-  for(var i =0; i< bugs.length; i++){
-    var bug = bugs[i];
+  var groupedBugsMap = new Map(), i, bug;
+  for(i =0; i< bugs.length; i++){
+    bug = bugs[i];
     var id = bug.id;
     if( !groupedBugsMap.get(id)){
       groupedBugsMap.set(id, [bug]);
@@ -130,8 +130,8 @@ function createStats(bugs){
 
   sortedBugGroups.sort(function(a,b){ return b.length - a.length; });
   var results = [];
-  for(var i=0; i< sortedBugGroups.length; i++){
-    var bug = sortedBugGroups[i][0];
+  for(i=0; i< sortedBugGroups.length; i++){
+    bug = sortedBugGroups[i][0];
     var row = [bug.id, sortedBugGroups[i].length, bug.genome, bug.color];
     results.push(row);
   }
