@@ -8,38 +8,35 @@ class Bug{
   }
 
   move(world){
-    var sum=0;
-    var i, running;
-    for(i = 0; i<this.genome.length; i++){
+    let sum=0;
+    for(let i = 0; i<this.genome.length; i++){
       sum+= this.genome[i];
     }
-    var guess = Math.random() * sum;
-    var pos=0;
-    for(i = 0, running=0; i<this.genome.length; i++){
+    let guess = Math.random() * sum;
+    let pos=0;
+    for(let i = 0, running=0; i<this.genome.length; i++){
       running += this.genome[i];
       if(guess < running){
         pos = i;
         break;
       }
     }
-    var xMoves = [0,1,1,1,0,-1,-1,-1];
-    var yMoves = [1,1,0,-1,-1,-1,0,1];
-    var wrapAround = (c, size) => ( c<0 ? size -1 : (c>=size ? 0: c) );
-    var noWrap = (c,size) => ( c<0 ? 0 : (c>=size ? size-1: c) );
-    var bounds = (world.wrapAround) ? wrapAround : noWrap;
+    const xMoves = [0,1,1,1,0,-1,-1,-1];
+    const yMoves = [1,1,0,-1,-1,-1,0,1];
+    let wrapAround = (c, size) => ( c<0 ? size -1 : (c>=size ? 0: c) );
+    let noWrap = (c,size) => ( c<0 ? 0 : (c>=size ? size-1: c) );
+    let bounds = (world.wrapAround) ? wrapAround : noWrap;
     this.x = bounds(this.x+ xMoves[pos], world.width);
     this.y = bounds(this.y+ yMoves[pos], world.height);
   }
 
   mutate(){
-    var pos = Math.floor(Math.random() * this.genome.length);
+    let pos = Math.floor(Math.random() * this.genome.length);
     this.genome[pos] = Math.max(0, this.genome[pos] + Math.random()*2 - 1);
     this.id = ++bugIDCount;
   }
 }
-var bugIDCount =1;
-
-
+let bugIDCount =1;
 
 class World{
   constructor(){
@@ -58,7 +55,7 @@ class World{
   }
   init(){
     this.food = new Array(this.width);
-    for(var i = 0; i < this.width; i++){
+    for(let i = 0; i < this.width; i++){
       this.food[i] = new Array(this.height);
       this.food[i].fill(0);
     }
@@ -73,9 +70,9 @@ class World{
   }
 
   eatFoodAt(x,y){
-    var foodAt = this.getFoodAt(x,y);
+    let foodAt = this.getFoodAt(x,y);
     if(foodAt>0){
-      var rv = Math.min(this.foodValue,foodAt);
+      const rv = Math.min(this.foodValue,foodAt);
       this.food[x][y] -= rv;
       return rv;
     }
@@ -83,9 +80,9 @@ class World{
   }
 
   generateFood(count){
-    for(var i = 0; i < count; i++){
-      var xPos = Math.floor(Math.random() * this.width);
-      var yPos = Math.floor(Math.random() * this.height);
+    for(let i = 0; i < count; i++){
+      const xPos = Math.floor(Math.random() * this.width);
+      const yPos = Math.floor(Math.random() * this.height);
       this.addFood(xPos,yPos);
     }
   }
@@ -97,22 +94,22 @@ class World{
   }
 
   paintFood(x,y){
-    for(var i=this.seed;i< this.seed + 250; i++){
-      var r = Math.random() * 5;
+    for(let i=this.seed;i< this.seed + 250; i++){
+      let r = Math.random() * 5;
       r = r*r;
-      var theta = Math.random() * 6.29;
-      var xPos = x+Math.floor(r * Math.cos(theta));
-      var yPos = y+ Math.floor(r * Math.sin(theta));
+      const theta = Math.random() * 6.29;
+      const xPos = x+Math.floor(r * Math.cos(theta));
+      const yPos = y+ Math.floor(r * Math.sin(theta));
       this.addFood( xPos, yPos);
     }
     this.seed +=250;
   }
 
   oneStep(){
-    var currentBugs = this.bugs.slice();
+    let currentBugs = this.bugs.slice();
 
-    for(var i =0; i < currentBugs.length; i++){
-      var bug = currentBugs[i];
+    for(let i =0; i < currentBugs.length; i++){
+      const bug = currentBugs[i];
       bug.energy -= this.energyConsumption;
       bug.move(this);
 
@@ -120,7 +117,7 @@ class World{
 
       if(bug.energy> this.reproductionEnergy){
         bug.energy = (this.reproductionEnergy/2.0)  * this.bugEnergyValue;
-        var newBug = new Bug(bug.x, bug.y, bug.energy , bug.id, bug.genome);
+        const newBug = new Bug(bug.x, bug.y, bug.energy , bug.id, bug.genome);
         if(Math.random() < this.mutateProbability){
           newBug.mutate();
         }

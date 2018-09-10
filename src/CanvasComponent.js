@@ -1,35 +1,23 @@
 import React from 'react';
+import Button from '@material-ui/core/Button';
 
 class CanvasComponent extends React.Component {
-  first = true;
-  idToColorMap = new Map();
-
-
-  componentWillMount(){
-    this.restart();
-  }
-
-  restart(){
-    this.idToColorMap.set(1,'rgb(200,0,0)');
-    var forceEven = (x) => ( x - (x % this.props.simulation.world.displayFactor));
-    this.width  = forceEven(Math.max(Math.min(window.innerWidth - 10, 500), 300));
-    this.height = forceEven(Math.max(Math.min(window.innerHeight- 70, 800),400));
-    if(this.refs.canvas){
-      this.refs.canvas.height = this.height;
-      this.refs.canvas.width = this.width;
-    }
-  }
-    componentDidMount() {
-      const simulation = this.props.simulation;
-      const world = simulation.world;
+  constructor(props){
+    super(props)
+    this.state = {showStartButton:true};
+    this.idToColorMap = new Map();
+    this.idToColorMap.set(1, 'rgb(200,0,0)');
+  } 
+  
+  componentDidMount() {
+      const {world} = this.props.simulation;
       const canvas = this.refs.canvas;
 
       this.drawing = false;
       this.mousePoint = null;
 
-
       function calcPoint(e){
-        var df = world.displayFactor;
+        const df = world.displayFactor;
         return {x:Math.floor((e.offsetX)/ df),
               y:Math.floor((e.offsetY) / df)};
       }
@@ -44,42 +32,40 @@ class CanvasComponent extends React.Component {
         this.mousePoint = calcPoint(e);
       }, false);
     }
-
-
+    componentWillUnmount(){
+      this.dead = true;
+    }
 
     updateCanvas() {
-      if(this.first){
-        this.refs.startButton.style.visibility="hidden";
-        this.first = false;
+      if(this.dead) return;
+      if (this.state.showStartButton){
+        this.setState({ showStartButton:false});
       }
-      const simulation = this.props.simulation;
-      const world = simulation.world;
+      const {world} = this.props.simulation;
       if(this.drawing){
         world.paintFood(this.mousePoint.x, this.mousePoint.y);
       }
       const canvas = this.refs.canvas;
       const ctx = canvas.getContext('2d');
-      simulation.foodCount =0;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = 'rgb(0,200,0)';
-      var df = world.displayFactor, color;
-      for(var x =0; x < world.width; x++){
-        for(var y=0; y < world.height; y++){
-          var food = world.getFoodAt(x,y);
+      const df = world.displayFactor;
+      for(let x =0; x < world.width; x++){
+        for(let y=0; y < world.height; y++){
+          const food = world.getFoodAt(x,y);
           if( food > 0){
-            color = Math.floor((100 - (food/world.maxFood) * 100) + 155);
+            let color = Math.floor((100 - (food/world.maxFood) * 100) + 155);
             color = Math.min(color, 255);
             ctx.fillStyle = 'rgb(0,'+ color + ',0)';
             ctx.fillRect(x*df, y*df, df, df);
-            simulation.foodCount += food;
           }
         }
       }
 
-      for(var i =0; i< world.bugs.length;i++){
-        var bug = world.bugs[i];
+      for(let i =0; i< world.bugs.length;i++){
+        const bug = world.bugs[i];
         if(!bug.color){
-          color = this.idToColorMap.get(bug.id);
+          let color = this.idToColorMap.get(bug.id);
           if(!color)
             this.idToColorMap.set(bug.id, color= bugColors[bug.id % bugColors.length] );
           bug.color = color;
@@ -88,15 +74,19 @@ class CanvasComponent extends React.Component {
         ctx.fillRect(bug.x*df-1, bug.y*df-1, df+1, df+1);
       }
     }
-    start = () => {
-        this.props.start();
-    };
+
     render() {
          return (
-           <div height={this.height} width={this.width} className="canvas-container">
-           <canvas ref="canvas" height={this.height} width={this.width} className="world-canvas"></canvas>
-           <button id='start-button' className='start-button ui teal button massive' onClick={this.start} ref="startButton">Start Simulation</button>
-           </div>
+           <div height={this.props.dimensions.height} width={this.props.dimensions.width} className="canvas-container">
+           <canvas ref="canvas" height={this.props.dimensions.height} 
+               width={this.props.dimensions.width} className="world-canvas"></canvas>
+           { this.state.showStartButton && (
+               <Button id='start-button' variant="extendedFab" color="secondary" onClick={this.props.start} 
+           size="large" ref="startButton">
+            Start Simulation
+          </Button>
+           )}
+          </div>
          );
     }
 }

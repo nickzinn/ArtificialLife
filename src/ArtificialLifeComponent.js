@@ -1,84 +1,41 @@
 import React from 'react';
 import './ArtificialLifeComponent.css';
-import {Simulation} from './simulation.js';
-import CanvasComponent from './CanvasComponent.js';
-import FormComponent from './FormComponent.js';
-import InfoModal from './InfoModal.js'
-import { Menu, Button, Icon, Table, Message, Responsive } from 'semantic-ui-react';
+import {Simulation} from './simulation';
+import CanvasComponent from './CanvasComponent';
+import FormComponent from './form/FormComponent';
+import InfoModal from './InfoModal'
+import PauseButton from './PauseButton'
+import BugSummaryTable from './BugSummaryTable'
+import BottomNavigationComponent from './BottomNavigationComponent'
+import PopulationChart from './PopulationChart'
 
-
-//# <PauseButton onPause={this.pause} onResume={this.resume} />
-class PauseButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {pause: false};
-    this.handleClick = this.handleClick.bind(this);
-  }
-  handleClick(e) {
-    if(!(this.state.pause ? this.props.onResume() : this.props.onPause()))
-      this.setState({pause: !this.state.pause});
-  }
-  render() {
-    if(this.props.small){
-    return (
-      <Button color={'teal'} icon onClick={this.handleClick}>
-      <Icon name={this.state.pause ? 'play' : 'pause'} /></Button>
-    );
-  }else{
-    return (
-      <Button color={'teal'}  style={{width:"153px"}} icon labelPosition='left' onClick={this.handleClick}>
-      <Icon name={this.state.pause ? 'play' : 'pause'} />
-      {this.state.pause ? 'RESUME' : 'PAUSE'}
-    </Button>
-    );
-  }
-  }
-}
-
-//<BugSummaryTable ref={(ip) => this.summaryTable = ip} />
-class BugSummaryTable extends React.Component {
-  state = {stats:[]};
-  update = (data) => this.setState({stats:data});
-
-  render() {
-    const stats = this.state.stats;
-    var rows = [];
-    stats.slice(0,10).forEach(function(stat, index) {
-        rows.push(
-          <Table.Row key={index} style={{color: stat[3]}}>
-            <Table.Cell>{stat[0]}</Table.Cell>
-            <Table.Cell>{stat[1]}</Table.Cell>
-            <Table.Cell>[{stat[2].map( (x)=> x.toFixed(2) ).join(' ')}]</Table.Cell>
-          </Table.Row>
-      );
-    });
-    return (
-    <Table style={{  width:"324px"}} size='small' compact unstackable striped >
-       <Table.Header>
-         <Table.Row>
-           <Table.HeaderCell>ID</Table.HeaderCell>
-           <Table.HeaderCell>#</Table.HeaderCell>
-           <Table.HeaderCell>Genome</Table.HeaderCell>
-         </Table.Row>
-       </Table.Header>
-       <Table.Body>
-        {rows}
-       </Table.Body>
-    </Table>
-    );
-  }
-}
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import Hidden from '@material-ui/core/Hidden';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import withWidth from '@material-ui/core/withWidth';
 
 class ArtificialLifeComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.simulation = new Simulation();
+    this.simulation = new Simulation(this.handleStatsUpdate);
+    this.state = { 'bugStats': [], 'populationHistory': [[[0,0]],[[0,0]]], 
+      'summaryStats': { gps: 0, fps: 0, bugCount: 0, food: 0 }, responsiveScreen: "simulation" };
+    this.dimensions = this.calcDimensions();
+    this.simulation.setCanvasSize(this.dimensions.width, this.dimensions.height);
   }
-
-  componentDidMount() {
-    this.simulation.setCanvasSize(this.canvasComponent.width, this.canvasComponent.height);
-    this.simulation.canvasComponent = this.canvasComponent;
-    this.simulation.summaryTable = this.summaryTable;
+  isResponsive = () => this.props.width === 'xs';
+  calcDimensions(){
+    const forceEven = (x) => (x - (x % this.simulation.world.displayFactor));
+    const heightMod = this.isResponsive() ? 120 : 78;
+    return {
+      width: forceEven(Math.max(Math.min(window.innerWidth - 10, 500), 300)),
+      height: forceEven(Math.max(Math.min(window.innerHeight - heightMod, 800), 400))};
   }
 
   componentWillUnmount() {
@@ -86,76 +43,84 @@ class ArtificialLifeComponent extends React.Component {
   }
 
   restart = () =>  {
-    var setPause = (x) => {if(x) x.setState({pause: false});};
-    setPause(this.pauseButton1);
-    setPause(this.pauseButton2);
-    this.canvasComponent.restart();
-    this.simulation.setCanvasSize(this.canvasComponent.width, this.canvasComponent.height);
+    this.pauseButton.setState({ pause: false });
     this.simulation.restart();
   }
   pause = () =>  this.simulation.pause();
   resume = () =>  this.simulation.resume();
 
+  handleStatsUpdate = (bugStats, populationHistory, summaryStats) =>{
+    this.setState({ 'bugStats': bugStats, 'populationHistory': populationHistory, 'summaryStats': summaryStats});
+  }
+  handleBottomNavChange = (e, value) =>{
+    this.setState({ responsiveScreen: value });
+  }
   render() {
+    const simulation = () =>(
+      <CanvasComponent ref={(ip) => this.simulation.canvasComponent = ip} className="world-canvas"
+      simulation={this.simulation} start={this.restart} dimensions={this.dimensions} />
+    );
+    const charts = () => (
+      <Card>
+        <CardHeader title='Realtime Population' />
+        <PopulationChart populationHistory={this.state.populationHistory} />
+      </Card>
+    );
+    const stats = () => (
+      <BugSummaryTable bugStats={this.state.bugStats} summaryStats={this.state.summaryStats} />
+    );
+    const settings = () =>(
+        <FormComponent simulation={this.simulation} onUpdate={this.restart} 
+        responsive={ this.isResponsive() } />
+    );
+    const components = {simulation, charts, stats, settings};
+    const responsiveUI = () => Object.keys(components).map( v => 
+      <div className='item-containerES' key={v} 
+      style={{ display: (this.state.responsiveScreen === v) ? 'inherit': 'none'}}>
+        {components[v]()}
+      </div>
+     );
+
     return (
-      <div>
-
-<Responsive {...Responsive.onlyMobile}>
-  <Menu size={'small'} borderless>
-    <Menu.Item header><Icon  name='bug'/>Artificial Life Simulation</Menu.Item>
-    <Menu.Menu position='right'>
-    <Menu.Item>
-    <Button color={'teal'} icon onClick={this.restart}>
-    <Icon name='refresh'/></Button>
-    </Menu.Item>
-    <Menu.Item>
-    <PauseButton small onPause={this.pause} onResume={this.resume}
-      ref={(ip) => this.pauseButton1 = ip} />
-    </Menu.Item>
-    <Menu.Item> <InfoModal small/> </Menu.Item>
-  </Menu.Menu>
-  </Menu>
-</Responsive>
-
-<Responsive minWidth={Responsive.onlyTablet.minWidth}>
-      <Menu size={'large'} stackable borderless>
-        <Menu.Item header><Icon size={"large"} name='bug'/>Artificial Life Simulation</Menu.Item>
-        <Menu.Menu position='right'>
-        <Menu.Item>
-        <Button color={'teal'} icon labelPosition='left' onClick={this.restart}>
-        <Icon name='refresh'/>RESTART </Button>
-        </Menu.Item>
-        <Menu.Item>
-        <PauseButton onPause={this.pause} onResume={this.resume}
-          ref={(ip) => this.pauseButton2 = ip}/>
-        </Menu.Item>
-        <Menu.Item> <InfoModal /> </Menu.Item>
-      </Menu.Menu>
-      </Menu>
-</Responsive>
-
-      <div id="wrap-container">
+      <React.Fragment>
+        <AppBar position="fixed" color="primary">
+          <Toolbar>
+            <FontAwesomeIcon icon="bug" size="lg" color="inherit" />
+            <Typography variant="title" color="inherit" className="app-bar-title">
+              &nbsp;&nbsp;Artificial Life&nbsp;<Hidden xsDown>Simulation</Hidden>
+            </Typography>
+            <IconButton color="inherit" onClick={this.restart}>
+              <RefreshIcon/></IconButton>
+            <PauseButton onPause={this.pause} onResume={this.resume}
+              ref={(ip) => this.pauseButton = ip} />
+            <InfoModal /> 
+          </Toolbar>
+        </AppBar>
+        <div id="wrap-container" style={{ paddingTop: this.isResponsive() ? '59px':'66px' }}>
+          {this.isResponsive() ? (
+            <React.Fragment>{responsiveUI()}</React.Fragment>
+      ) : (
+        <React.Fragment>
         <div className='item-container'>
-         <CanvasComponent ref={(ip) => this.canvasComponent = ip} className="world-canvas"
-            simulation={this.simulation} start={this.restart}>
-         </CanvasComponent>
+            {simulation()}
         </div>
         <div className='item-container'>
-         <div id="populationChart" style={{  height:"300px"}}></div>
-         <Message>
-         <FormComponent simulation={this.simulation} onUpdate={this.restart} />
-         </Message>
-
+          {charts()}
+          &nbsp;
+          {stats()}
         </div>
         <div className='item-container'>
-          <h5 id="performance" >GPS: 0 FPS: 0 Bugs: 0 Food: 0</h5>
-          <BugSummaryTable ref={(ip) => this.summaryTable = ip} />
+            {settings()}
         </div>
+        </React.Fragment>
+      )}
       </div>
-
-      </div>
+        <BottomNavigationComponent 
+          value={this.state.responsiveScreen} 
+          onChange={this.handleBottomNavChange } />
+      </React.Fragment>
     );
   }
 }
 
-export default ArtificialLifeComponent;
+export default withWidth()(ArtificialLifeComponent);

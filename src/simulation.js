@@ -1,62 +1,53 @@
 import {World} from './artificialLife.js'
-var Highcharts = require('highcharts');
-
 class Simulation{
-  constructor(){
+  constructor(onStatsUpdate){
     this.requestID =0;
     this.world = new World();
     this.generations =0;
+    this.onStatsUpdate = onStatsUpdate;
   }
   setCanvasSize(width, height){
     this.canvasHeight = height;
     this.canvasWidth = width;
-    if(this.chart){
-      this.chart.destroy();
-    }
-    document.getElementById('populationChart').style.width = width-10;
-    this.chart = new Chart([0,0], [0, this.world.initialFood]);
   }
 
   restart(){
     this.pause();//just incase
-    var df = this.world.displayFactor;
-    this.world.height = this.canvasHeight/df;
-    this.world.width = this.canvasWidth/df;
+    const df = this.world.displayFactor;
+    this.world.height = Math.round(this.canvasHeight/df);
+    this.world.width = Math.round(this.canvasWidth/df);
     this.world.init();
     this.startTime =0;
     this.lastGraphUpdate =0;
     this.frames =0;
     this.lastGeneration=0;
     this.resume();
-    if(this.chart){
-      this.chart.destroy();
-      this.chart = new Chart([0,0], [0, this.world.initialFood]);
-    }
+    this.populationHistory = [[[0, this.world.bugs.length]], [[0, this.world.initialFood]]];
   }
   step(timestamp) {
     if(this.drawing){
       this.world.paintFood(this.mousePoint.x, this.mousePoint.y);
     }
     if (!this.startTime) this.startTime = timestamp;
-    var i;
-    for(i =0; i< this.world.stepsPerAnimation; i++){
+    for(let i =0; i< this.world.stepsPerAnimation; i++){
       this.world.oneStep();
       this.generations++;
     }
     if(this.canvasComponent) this.canvasComponent.updateCanvas();
     if(timestamp - this.lastGraphUpdate > 1000){
-      var timeSinceLast = (timestamp - this.lastGraphUpdate)/1000;
-      var fps = Math.floor(this.frames/timeSinceLast), gens = Math.floor((this.generations -
+      const timeSinceLast = (timestamp - this.lastGraphUpdate)/1000;
+      const fps = Math.floor(this.frames/timeSinceLast), gens = Math.floor((this.generations -
         this.lastGeneration)/timeSinceLast);
       this.frames =0;
       this.lastGeneration = this.generations;
       this.lastGraphUpdate = timestamp;
-      this.chart.updateChart([this.generations, this.world.bugs.length],
-        [this.generations, this.foodCount]);
-      document.getElementById('performance').innerHTML = "GPS: " +
-       gens + " FPS: " + fps +" Bugs: " + this.world.bugs.length + " Food: " + this.foodCount;
       //calc most common bug.
-      this.summaryTable.update(createStats(this.world.bugs));
+      const bugStats = createStats(this.world.bugs);
+      const foodCount = this.countFood();
+      this.populationHistory[0].push([this.generations, this.world.bugs.length]);
+      this.populationHistory[1].push([this.generations, foodCount]);
+      const summaryStats = { 'gps': gens, 'fps': fps, 'bugCount': this.world.bugs.length , 'food': foodCount};
+      this.onStatsUpdate(bugStats, this.populationHistory, summaryStats);
     }
     this.frames++;
     this.requestID = null;
@@ -71,71 +62,32 @@ class Simulation{
     window.cancelAnimationFrame(this.requestID);
     this.requestID = null;
   }
-}
-
-class Chart{
-  constructor(d1, d2 ){
-    this.chart = Highcharts.chart('populationChart', {
-      credits: { enabled: false},
-      boost: { useGPUTranslations: true},
-      title: { text: 'Realtime Population' },
-      tooltip: { valueDecimals: 0},
-      yAxis: [{
-       lineWidth: 1,
-       allowDecimals: false,
-       title: {
-           text: 'Bug Population'
-       }
-   }, {
-       lineWidth: 1,
-       allowDecimals: false,
-       opposite: true,
-       title: {
-           text: 'Food Count'
-       }
-   }],
-      series: [{
-          data: [d1],
-          lineWidth: 0.5,
-          name:"Population"
-      },{
-        data: [d2],
-        lineWidth: 0.5,
-        yAxis: 1,
-        name:"Food"
-      }]
-    });
-  }
-  updateChart(d1, d2){
-    this.chart.series[0].addPoint(d1, true, false);
-    this.chart.series[1].addPoint(d2, true, false);
-  }
-  destroy(){
-    this.chart.destroy();
+  countFood(){
+    let foodCount =0;
+    const {world} = this;
+    for (let x = 0; x < world.width; x++) {
+      for (let y = 0; y < world.height; y++) {
+        foodCount += world.getFoodAt(x, y);
+      }
+    }
+    return foodCount;
   }
 }
 
 function createStats(bugs){
-  var groupedBugsMap = new Map(), i, bug;
-  for(i =0; i< bugs.length; i++){
-    bug = bugs[i];
-    var id = bug.id;
+  let groupedBugsMap = new Map();
+  bugs.forEach( bug => {
+    let {id} = bug;
     if( !groupedBugsMap.get(id)){
       groupedBugsMap.set(id, [bug]);
     }else{
       groupedBugsMap.get(id).push(bug);
     }
-  }
-  var sortedBugGroups = Array.from( groupedBugsMap.values() );
+  });
+  let sortedBugGroups = Array.from( groupedBugsMap.values() );
 
-  sortedBugGroups.sort(function(a,b){ return b.length - a.length; });
-  var results = [];
-  for(i=0; i< sortedBugGroups.length; i++){
-    bug = sortedBugGroups[i][0];
-    var row = [bug.id, sortedBugGroups[i].length, bug.genome, bug.color];
-    results.push(row);
-  }
-  return results;
+  sortedBugGroups.sort((a,b) =>  b.length - a.length );
+  return sortedBugGroups.map(e => [e[0].id, e.length, e[0].genome, e[0].color] );
 }
 
 export  {Simulation};
