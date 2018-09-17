@@ -1,7 +1,6 @@
 import React from 'react';
 
-import Typography from '@material-ui/core/Typography';
-import FormControl from '@material-ui/core/FormControl';
+import {Typography, FormControl} from '@material-ui/core';
 import SliderControl from '@material-ui/lab/Slider';
 
 export default class Slider extends React.Component {

@@ -1,17 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import IconButton from '@material-ui/core/IconButton';
+
+import { DialogContentText, IconButton, DialogTitle, Dialog, DialogContent, DialogActions, Button, Slide} from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
-import Slide from '@material-ui/core/Slide';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;

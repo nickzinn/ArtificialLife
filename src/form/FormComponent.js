@@ -1,9 +1,6 @@
 import React from 'react';
 
-import FormGroup from '@material-ui/core/FormGroup';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
+import { FormGroup, Card, CardHeader, CardContent} from '@material-ui/core';
 import Slider from './Slider';
 import CheckboxComponent from './CheckboxComponent';
 
