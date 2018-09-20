@@ -24,6 +24,8 @@ transform: translate(-50%, 0);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  flex:1;
+  overflow: auto;
 }
 .item-container {
     margin: 5px;

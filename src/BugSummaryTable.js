@@ -12,7 +12,7 @@ const TightTableCell = withStyles({
 
 
 
-class BugSummaryTable extends React.Component {
+export default class BugSummaryTable extends React.Component {
 
     render() {
         const stats = this.props.bugStats;
@@ -52,5 +52,3 @@ class BugSummaryTable extends React.Component {
         );
     }
 }
-
-export default BugSummaryTable;

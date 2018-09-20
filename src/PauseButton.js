@@ -5,7 +5,7 @@ import Pause from '@material-ui/icons/Pause';
 import IconButton from '@material-ui/core/IconButton';
 
 //# <PauseButton onPause={this.pause} onResume={this.resume} />
-class PauseButton extends React.Component {
+export default class PauseButton extends React.Component {
   render() {
     return (
       <IconButton color="inherit" onClick={this.props.onClick}>
@@ -14,5 +14,3 @@ class PauseButton extends React.Component {
     );
   }
 }
-
-export default PauseButton;

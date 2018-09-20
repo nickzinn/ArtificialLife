@@ -1,53 +1,26 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-import { DialogContentText, IconButton, DialogTitle, Dialog, DialogContent, DialogActions, Button, Slide} from '@material-ui/core';
+import ButtonModal from './ButtonModal'
+import { DialogContentText} from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import withMobileDialog from '@material-ui/core/withMobileDialog';
-
-function Transition(props) {
-  return <Slide direction="up" {...props} />;
-}
 
 
-const styles = {
-};
-
-class InfoModal extends React.Component {
-  state = {
-    open: false,
-  };
-
-  handleOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
+export default class InfoModal extends React.Component {
 
   render() {
-    const { fullScreen } = this.props;
     return (
-      <React.Fragment>
-        <IconButton color="inherit" aria-label="Edit" onClick={this.handleOpen}>
+      <ButtonModal dialogButton={
           <InfoIcon />
-        </IconButton>
-        <Dialog
-          aria-labelledby="modal-title"
-          open={this.state.open}
-          onClose={this.handleClose}
-          fullScreen={fullScreen}
-          scroll={'paper'}
-          TransitionComponent={Transition}
-          maxWidth="md"
-        >
-            <DialogTitle  id="modal-title">
-              <FontAwesomeIcon icon="bug" size="lg" color="teal" />&nbsp;&nbsp;
+      }
+      dialogTitle={
+          <React.Fragment>
+            <FontAwesomeIcon icon="bug" size="lg" color="teal" /> &nbsp;&nbsp;
               Artificial Life Simulator
-            </DialogTitle>
-            <DialogContent>
+          </React.Fragment>
+          } 
+      >
+        <React.Fragment>
             <DialogContentText variant="subheading">
               What is this?
             </DialogContentText>
@@ -104,22 +77,8 @@ class InfoModal extends React.Component {
             <DialogContentText variant="caption">
               <em>Nicholas Zinn (nickzinn@gmail.com), 2018.</em>
             </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                CLOSE
-              </Button>
-            </DialogActions>
-        </Dialog>
-      </React.Fragment>
+        </React.Fragment>
+      </ButtonModal>
     );
   }
 }
-
-InfoModal.propTypes = {
-  onClose: PropTypes.func
-};
-
-const InfoModalWrapped = withMobileDialog(styles)(InfoModal);
-
-export default InfoModalWrapped;

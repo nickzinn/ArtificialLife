@@ -12,7 +12,7 @@ class BottomNavigationComponent extends React.Component {
         return (
             <Hidden smUp>
             <BottomNavigation
-                style={{ position: "fixed", bottom: "0", width: "100%" , zIndex:1001}}
+                style={{ position: "static", width: "100%" , zIndex:1001}}
                 value={value}
                 onChange={onChange}
                 showLabels

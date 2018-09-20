@@ -27,9 +27,10 @@ class ArtificialLifeComponent extends React.Component {
   isResponsive = () => this.props.width === 'xs';
   calcDimensions() {
     const forceEven = (x) => (x - (x % this.simulation.world.displayFactor));
-    const heightMod = this.isResponsive() ? 120 : 78;
+    const heightMod = this.isResponsive() ? 120 : 80;
+    
     return {
-      width: forceEven(Math.max(Math.min(window.innerWidth - 10, 500), 300)),
+      width: forceEven(Math.max(Math.min(window.innerWidth - 12, 500), 300)),
       height: forceEven(Math.max(Math.min(window.innerHeight - heightMod, 800), 400))
     };
   }
@@ -80,7 +81,7 @@ class ArtificialLifeComponent extends React.Component {
 
     return (
       <React.Fragment>
-        <AppBar position="fixed" color="primary">
+        <AppBar position="static" color="primary">
           <Toolbar>
             <FontAwesomeIcon icon="bug" size="lg" color="inherit" />
             <Typography variant="title" color="inherit" className="app-bar-title">
@@ -92,7 +93,7 @@ class ArtificialLifeComponent extends React.Component {
             <InfoModal />
           </Toolbar>
         </AppBar>
-        <div id="wrap-container" style={{ paddingTop: this.isResponsive() ? '59px' : '66px' }}>
+        <div id="wrap-container">
           {this.isResponsive() ? (
             <React.Fragment>{responsiveUI()}</React.Fragment>
           ) : (

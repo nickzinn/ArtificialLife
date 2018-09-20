@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 
-class CanvasComponent extends React.Component {
+export default class CanvasComponent extends React.Component {
   constructor(props){
     super(props)
     this.state = {showStartButton:true};
@@ -94,5 +94,3 @@ class CanvasComponent extends React.Component {
 var bugColors = ['#F44336','#9C27B0','#3F51B5','#FFEB3B','#EF5350','#9C27B0','#2196F3','#FFC107','#FF1744',
   '#AA00FF','#00BCD4','#FF9800','#D50000','#6200EA','#304FFE','#FF5722','#F44336','#6200EA','#304FFE','#FF5722',
   '#E91E63','#673AB7','#0091EA','#FFAB00','#C51162','#00B8D4','#FF6D00','#F50057','#FF3D00'];
-
-export default CanvasComponent;

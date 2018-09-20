@@ -86,7 +86,6 @@ export default class FormComponent extends React.Component {
           </FormGroup>
            </CardContent>
           </Card>
-           {(this.props.responsive) && (<div style={{paddingTop:'70px' }}></div>) }
           </div>
        );
   }
