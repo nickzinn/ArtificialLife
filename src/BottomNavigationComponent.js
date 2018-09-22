@@ -5,14 +5,11 @@ import SpaIcon from '@material-ui/icons/Spa';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ListIcon from '@material-ui/icons/List';
 
-
-class BottomNavigationComponent extends React.Component {
-    render() {
-        const {value, onChange} = this.props;
-        return (
-            <Hidden smUp>
+const BottomNavigationComponent = ({value, onChange}) => {
+    return (
+        <Hidden smUp>
             <BottomNavigation
-                style={{ position: "static", width: "100%" , zIndex:1001}}
+                style={{ position: "static", width: "100%", zIndex: 1001 }}
                 value={value}
                 onChange={onChange}
                 showLabels
@@ -22,9 +19,7 @@ class BottomNavigationComponent extends React.Component {
                 <BottomNavigationAction label="Settings" value="settings" icon={<ListIcon />} />
                 <BottomNavigationAction label="Stats" value="stats" icon={<LocationOnIcon />} />
             </BottomNavigation>
-            </Hidden>
-        );
-    }
+        </Hidden>
+    );
 }
-
 export default BottomNavigationComponent;
