@@ -10,7 +10,7 @@
     "@material-ui/icons": "^3.0.1",
     "@material-ui/lab": "^3.0.0-alpha.15",
     "babel-polyfill": "^6.26.0",
-    "highcharts": "^6.1.2",
+    "highcharts": "^9.0.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-scripts": "^1.1.5"
