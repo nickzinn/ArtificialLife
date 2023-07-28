@@ -1,0 +1,57 @@
+/***** prototypes *****/
+
+extern int isbuttonpressed(void);
+
+extern int initmouse(void);
+
+extern void getmousexy(int *px, int *py);
+
+extern void mouseon(void);
+
+extern void mouseoff(void);
+
+extern int isinside(int x, int y, struct rect_type rect);
+
+extern void message(char *pc);
+
+extern void drawmenu(void);
+
+extern void hilitemenu(int selection);
+
+extern int DrawGUI(void);
+
+extern void erasestr(int xloc,int yloc,char *str);
+
+int initgraphics(void);
+
+extern int getfixed(char *pc, int length);
+
+void exiterror(char *string);
+
+extern void movebug(struct bug_type *currentbug);
+
+extern void mutate(struct bug_type *bug);
+
+extern struct bug_type *insertbug(struct bug_type *bugbasedon);
+
+extern int deletebug(struct bug_type *deadbug);
+
+extern struct bug_type *findbug(int x,int y);
+
+extern void checkbug(struct bug_type *currentbug);
+
+extern void drawbugs (void);
+
+extern int getkey(void);
+
+extern void drawbutt(struct rect_type rect, char inyoraudi);
+
+extern void makefood (void);
+
+extern void mainloop(void);
+
+extern void longmessage(char *pc);
+
+void display(void);
+
+extern void gprintxy(int xloc,int yloc, char *fmt,...);
