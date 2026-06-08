@@ -1,3 +1,5 @@
+**Try it here:  [simbugs.com](https://simbugs.com/)**
+
 <h3>What is this?</h3>
 This is a simulation of natural selection in a virtual world.  Virtual
 bugs compete for virtual food.  Only the best bugs are able to get enough
